@@ -1,38 +1,34 @@
 <mvc:View
 		controllerName="sap.ui.demo.walkthrough.controller.InvoiceList"
 		xmlns="sap.m"
+		xmlns:core="sap.ui.core"
 		xmlns:mvc="sap.ui.core.mvc">
         	<Panel accessibleRole="Region">
-		<headerToolbar>
-			<Toolbar>
-				<Title text="{i18n>invoiceListTitle}"/>
-				<ToolbarSpacer/>
-				<SearchField
-					width="50%"
-					search=".onFilterInvoices"
-					ariaLabelledBy="searchFieldLabel"
-					ariaDescribedBy="searchFieldDescription"
-					placeholder="{i18n>searchFieldPlaceholder}"/>
-			</Toolbar>
-		</headerToolbar>
 	<Table
 		id="invoiceList"
 		class="sapUiResponsiveMargin"
 		width="auto"
 		items="{
-			path : 'invoice>/Invoices',
-			sorter : {
-				path : 'ShipperName',
-				group : true
-			}
-		}">
+         path : 'invoice>/Invoices',
+         sorter : {
+            path : 'ProductName' 
+         }
+      }"
+		>
 		<headerToolbar>
-			<Toolbar>
-				<Title text="{i18n>invoiceListTitle}"/>
-				<ToolbarSpacer/>
-				<SearchField width="50%" search=".onFilterInvoices"/>
-			</Toolbar>
-		</headerToolbar>
+         <Toolbar>
+            <Title text="{i18n>invoiceListTitle}"/>
+            <ToolbarSpacer/>
+            <MultiComboBox
+                width="50%"
+                selectionFinish=".onFilterInvoices"
+                items="{
+				      path: 'invoice>/Filter'
+			      }">
+			      <core:Item key="{invoice>key}" text="{invoice>value}"/>
+            </MultiComboBox>
+         </Toolbar>
+      </headerToolbar>
 		<columns>
 			<Column
 				hAlign="End"
@@ -54,10 +50,6 @@
 				demandPopin="false">
 				<Text text="{i18n>columnSupplier}"/>
 			</Column>
-			<Column
-				hAlign="End">
-				<Text text="{i18n>columnPrice}"/>
-			</Column>
 		</columns>
 		<items>
 			<ColumnListItem
@@ -71,16 +63,7 @@
 						formatter: '.formatter.statusText'
 					}"/>
 					<Text text="{invoice>ShipperName}"/>
-					<ObjectNumber
-						number="{
-							parts: [{path: 'invoice>ExtendedPrice'}, {path: 'view>/currency'}],
-							type: 'sap.ui.model.type.Currency',
-							formatOptions: {
-								showMeasure: false
-							}
-						}"
-						unit="{view>/currency}"
-						state="{= ${invoice>ExtendedPrice} > 50 ? 'Error' : 'Success' }"/>
+					<ObjectNumber/>
 				</cells>
 			</ColumnListItem>
 		</items>

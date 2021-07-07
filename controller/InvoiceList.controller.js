@@ -9,21 +9,18 @@ sap.ui.define([
 	return Controller.extend("sap.ui.demo.walkthrough.controller.InvoiceList", {
 		formatter: formatter, 
 		onInit : function () {
-			var oViewModel = new JSONModel({
-				currency: "EUR"
-			});
+			var oViewModel = new JSONModel();
 			this.getView().setModel(oViewModel, "view");
 		},
 		onFilterInvoices : function (oEvent) {
-
-			// build filter array
 			var aFilter = [];
-			var sQuery = oEvent.getParameter("query");
-			if (sQuery) {
-				aFilter.push(new Filter("ProductName", FilterOperator.Contains, sQuery));
+			var aSelectedItems = oEvent.getParameter("selectedItems");
+  			var aSelectedTexts = aSelectedItems.map(oItem => oItem.getText());
+			for (var i = 0; i < aSelectedTexts.length; i++){
+				if (aSelectedTexts){
+					aFilter.push(new Filter("Status", FilterOperator.Contains, aSelectedTexts[i]));
+				}
 			}
-
-			// filter binding
 			var oList = this.byId("invoiceList");
 			var oBinding = oList.getBinding("items");
 			oBinding.filter(aFilter);
